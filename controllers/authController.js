@@ -1,5 +1,7 @@
-import CreateError from "../handler/error.js";
-import { signupValidator } from "../validators/authValidators.js";
+import {
+  signupValidator,
+  signinValidator,
+} from "../validators/authValidators.js";
 
 export const validateSignup = async (req, _, next) => {
   try {
@@ -17,11 +19,15 @@ export const validateSignup = async (req, _, next) => {
   }
 };
 
-export const validateSignin = (req, _, next) => {
+export const validateSignin = async (req, _, next) => {
   try {
     const { email, password } = req.body;
 
-    if (!(email || password)) throw CreateError(400, "Worng validation");
+    const user = { email, password };
+
+    const validatedUser = await signinValidator.validate(user);
+
+    req.user = validatedUser;
 
     next();
   } catch (error) {

@@ -1,7 +1,7 @@
 import express from "express";
 export const authRouter = new express.Router();
 
-import { signup, signin, signout } from "../models/authModel.js";
+import { signup, signin, signout } from "../models/auth-model.js";
 import {
   validateSignup,
   validateSignin,
