@@ -1,4 +1,4 @@
-export default function CreateError(status, message) {
+export default function createStatusError(status, message) {
   const error = new Error(message);
   error.status = status;
 

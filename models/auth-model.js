@@ -1,11 +1,12 @@
-// TODO: implement sign in logic here
-// TODO: implement sign out logic here
-import { User } from "../db-models/user-model.js";
-import CreateError from "../handler/error.js";
+import { User } from "../db-schemas/user-schema.js";
 
 export const signup = async (req, res) => {
   try {
     const { username, email, password } = req.user;
+
+    const doesUserExist = await User.findOne({ email });
+
+    if (doesUserExist) throw new Error();
 
     const createdUser = new User({
       username,
@@ -26,8 +27,8 @@ export const signup = async (req, res) => {
     };
 
     res.status(201).json({ user, token: createdUser.token });
-  } catch (e) {
-    res.status(400).json({ message: e.message });
+  } catch (error) {
+    res.status(400).json({ message: "Something is wrong" });
   }
 };
 
@@ -37,13 +38,15 @@ export const signin = async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    if (!user) throw CreateError(400, "Wrong email or password");
+    if (!user) throw new Error();
 
     const validPassword = user.validPassword(password);
 
-    if (!validPassword) throw CreateError(400, "Wrong email or password");
+    if (!validPassword) throw new Error();
 
-    user.generateToken();
+    user.generateToken(user._id);
+
+    await user.save();
 
     const validUser = {
       id: user._id,
@@ -53,11 +56,19 @@ export const signin = async (req, res) => {
     };
 
     res.status(200).json({ user: validUser, token: user.token });
-  } catch (e) {
-    res.status(400).json({ message: e.message });
+  } catch (error) {
+    res.status(400).json({ message: "Wrong email or password" });
   }
 };
 
-export const signout = (req, res) => {
-  res.status(201).json({});
+export const signout = async (req, res) => {
+  try {
+    const { _id } = req.user;
+
+    await User.findOneAndUpdate({ _id }, { token: "" });
+
+    res.status(204).json();
+  } catch (error) {
+    res.status(400).json({ message: "Something is wrong" });
+  }
 };

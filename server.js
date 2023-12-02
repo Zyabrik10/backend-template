@@ -4,9 +4,8 @@ import mongoose from "mongoose";
 
 dotenv.config();
 
-export const connection = mongoose.connect(process.env.DB_HOST);
-
-connection
+mongoose
+  .connect(process.env.DB_HOST)
   .then(() => {
     app.listen(process.env.PORT, process.env.HOST, () => {
       console.log(

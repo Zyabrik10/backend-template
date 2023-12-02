@@ -1,9 +1,9 @@
 import {
   signupValidator,
   signinValidator,
-} from "../validators/authValidators.js";
+} from "../validators/auth-validators.js";
 
-export const validateSignup = async (req, _, next) => {
+export const signupController = async (req, _, next) => {
   try {
     const { username, email, password } = req.body;
 
@@ -19,7 +19,7 @@ export const validateSignup = async (req, _, next) => {
   }
 };
 
-export const validateSignin = async (req, _, next) => {
+export const signinController = async (req, _, next) => {
   try {
     const { email, password } = req.body;
 
@@ -29,14 +29,6 @@ export const validateSignin = async (req, _, next) => {
 
     req.user = validatedUser;
 
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const validateSignout = (req, res, next) => {
-  try {
     next();
   } catch (error) {
     next(error);
