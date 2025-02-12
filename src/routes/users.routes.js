@@ -32,14 +32,14 @@ userRouter.get(
   getAllUsers
 );
 userRouter.get("/me", verifyToken("token"), getMe);
-userRouter.post(
+userRouter.patch(
   "/update-me",
   validateUpdateMe,
   verifyToken("token"),
   isUserVerified,
   updateMe
 );
-userRouter.post(
+userRouter.patch(
   "/update/:id",
   validateUpdate,
   verifyToken("token"),
@@ -79,7 +79,7 @@ userRouter.post(
   isUserVerified,
   sendForgotPasswordForm
 );
-userRouter.post(
+userRouter.patch(
   "/update-password",
   verifyToken("verifyToken"),
   isUserVerified,
