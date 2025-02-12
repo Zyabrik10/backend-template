@@ -25,8 +25,6 @@ export const doesUserExist = catchError(async (req) => {
 
     if (!user) throw createStatusError("User not found", 404);
 
-    user.password = null;
-
     req.foundUser = user;
 });
 
