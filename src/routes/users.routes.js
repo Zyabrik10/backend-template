@@ -24,7 +24,7 @@ import { verifyId } from "../middlewares/db.middleware.js";
 
 const userRouter = express.Router();
 
-userRouter.get(
+userRouter.post(
   "/",
   verifyToken("token"),
   isUserVerified,
@@ -49,7 +49,7 @@ userRouter.patch(
   doesUserExist,
   update
 );
-userRouter.get(
+userRouter.post(
   "/:id",
   verifyToken("token"),
   isUserVerified,
